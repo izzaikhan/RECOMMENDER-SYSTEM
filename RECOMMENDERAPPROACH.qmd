@@ -1,0 +1,56 @@
+---
+title: "Recommender System - Approach"
+author: IZZA KHAN
+format: html
+---
+
+## Overview
+In this assignment, I will build a personalized recommender system using survey data. Unlike the global baseline model, this system will generate user-specific recommendations based on individual preferences.
+
+The goal is to produce Top-N recommendations for each user.
+
+## Method
+I will use a User-to-User Collaborative Filtering approach.
+
+This method works by identifying users with similar preferences and recommending items liked by similar users.
+
+Similarity will be measured using cosine similarity.
+
+## Workflow
+
+### Data Preparation
+- Convert survey data into a user-item matrix
+- Rows = users, Columns = items
+- Handle missing values
+
+### Similarity Calculation
+- Compute similarity between users
+- Identify nearest neighbors
+
+### Prediction
+- Predict ratings based on similar users
+- Use weighted averages
+
+### Output
+- Generate Top-N recommendations per user
+- Exclude already-rated items
+
+## Evaluation
+I will evaluate performance using a hold-out dataset.
+
+Metrics:
+- RMSE (for rating prediction)
+- Ranking accuracy
+
+## Tools
+- R
+- recommenderlab
+- tidyverse
+
+## Challenges
+- Sparse data
+- Choosing number of neighbors
+- Avoiding popularity bias
+
+## Goal
+To create a personalized system that improves recommendation quality compared to a global model.
