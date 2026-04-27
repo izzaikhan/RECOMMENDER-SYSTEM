@@ -1,0 +1,78 @@
+---
+title: "Recommender System Code"
+format: html
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+ratings <- matrix(c(
+  5, NA, 3, 1,
+  4, 2, NA, 1,
+  1, 2, 4, NA,
+  NA, 3, 4, 5,
+  2, NA, 1, 5
+), nrow = 5, byrow = TRUE)
+
+colnames(ratings) <- c("Item1", "Item2", "Item3", "Item4")
+rownames(ratings) <- c("User1", "User2", "User3", "User4", "User5")
+
+ratings
+```
+
+```{r}
+ratings_filled <- ratings
+ratings_filled[is.na(ratings_filled)] <- 0
+
+ratings_filled
+```
+
+```{r}
+cosine_similarity <- function(x, y) {
+  sum(x * y) / (sqrt(sum(x^2)) * sqrt(sum(y^2)))
+}
+```
+
+```{r}
+similarity_matrix <- matrix(0, nrow=5, ncol=5)
+
+for(i in 1:5){
+  for(j in 1:5){
+    similarity_matrix[i,j] <- cosine_similarity(ratings_filled[i,], ratings_filled[j,])
+  }
+}
+
+rownames(similarity_matrix) <- rownames(ratings)
+colnames(similarity_matrix) <- rownames(ratings)
+
+similarity_matrix
+```
+
+```{r}
+recommendations <- list()
+
+for(i in 1:nrow(ratings)){
+  
+  user_sim <- similarity_matrix[i,]
+  
+  scores <- colSums(user_sim * ratings_filled)
+  
+  # REMOVE already rated items
+  scores[!is.na(ratings[i,])] <- NA
+  
+  recommendations[[rownames(ratings)[i]]] <- names(sort(scores, decreasing = TRUE, na.last = TRUE))[1:2]
+}
+
+recommendations
+```
+
+## Method
+This recommender system uses user-to-user collaborative filtering. Cosine similarity is used to measure similarity between users.
+
+## Results
+The system generates Top-N recommendations for each user.
+
+## Conclusion
+This demonstrates a personalized recommendation system built without external packages.
